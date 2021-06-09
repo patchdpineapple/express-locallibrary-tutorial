@@ -1,3 +1,4 @@
+const { DateTime } = require("luxon");
 var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
@@ -20,7 +21,12 @@ AuthorSchema
 AuthorSchema
 .virtual("lifespan")
 .get(function() {
-    return (this.date_of_death.getYear() - this.date_of_birth.getYear()).toString();
+    if(this.date_of_birth && this.date_of_death) {
+        return (this.date_of_death.getYear() - this.date_of_birth.getYear()).toString();
+    } else {
+        return "";
+    }
+    
 });
 
 // Virtual for author's url
@@ -28,6 +34,22 @@ AuthorSchema
 .virtual("url")
 .get(function() {
     return "/catalog/author/" + this._id;
+});
+
+AuthorSchema
+.virtual("date_of_birth_formatted")
+.get(function() {
+    return this.date_of_birth ? 
+    DateTime.fromJSDate(this.date_of_birth).toLocaleString(DateTime.DATE_MED) 
+    : "";
+});
+
+AuthorSchema
+.virtual("date_of_death_formatted")
+.get(function() {
+    return this.date_of_death ? 
+    DateTime.fromJSDate(this.date_of_death).toLocaleString(DateTime.DATE_MED) 
+    : "";
 });
 
 // Export model
