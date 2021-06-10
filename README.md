@@ -4,4 +4,4 @@ A simple local library website written in Express(Node)
 
 #### Live preview
 
-Click [https://basic-informational-site.patchdpineapple.repl.co/](https://basic-informational-site.patchdpineapple.repl.co/)
+Click [https://fathomless-falls-37499.herokuapp.com](https://fathomless-falls-37499.herokuapp.com)
