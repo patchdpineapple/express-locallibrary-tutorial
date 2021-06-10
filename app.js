@@ -7,12 +7,18 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var catalogRouter = require('./routes/catalog');
+var compression = require('compression');
+var helmet = require('helmet');
 
+//Create express application object
 var app = express();
+
+app.use(helmet());
 
 // Set up mongoose connection
 var mongoose = require("mongoose");
-var mongoDB = "mongodb+srv://dbUser:dbUser123@cluster0.s5pkn.mongodb.net/local_library?retryWrites=true&w=majority";
+var dev_db_url = "mongodb+srv://dbUser:dbUser123@cluster0.s5pkn.mongodb.net/local_library?retryWrites=true&w=majority";
+var mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error"));
@@ -25,6 +31,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(compression()); //compress all routes
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
